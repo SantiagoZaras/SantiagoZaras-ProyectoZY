@@ -14,10 +14,10 @@ const dwSantiago = [
 
 //únete
 
-{id: 1, name: "Anabelle", image: "img/imagen05-ProyectoZY.jpg", genero: "Únete", description: "Recuerdas a la muñeca poseida que tenia que ser resguardada por el gran peligro que representaba? Pues tu puedes hacer lo mismo, uniéndote a nuestro curso, con algo todavia más peligroso, los residuos resiclabes y reutilizables que usas todos los dias."},
-{id: 2, name: "Volver al futuro", image: "img/imagen06-ProyectoZY.jpg", genero: "Únete", description: "En volver al futuro usaban el delorian para cambiar el pasado y así, tener un mejor futuro, nuestro curso hace lo mismo cambiando nuestor presente. Únete a nuestro curso de reciclaje y aprende a mejorar tus habitos."},
-{id: 3, name: "Los juegos del Hambre", image: "img/imagen07-ProyectoZY.jpg", genero: "Únete", description: "En los juegos del hambre cada distrito se clasifica de distintas y especificas maneras, para separarlos uno del otro. En nuestro curso, aprenderas a clasificar algo que es casi tan complejo, tu basura andes de desacharla."},
-{id: 4, name: "Wall-e", image: "img/imagen08-ProyectoZY.jpg", genero: "Únete", description: "Es decir, vamos...todos sabemos lo que paso en Wall-e. Únete a nuestro curso para aprender como crear y mantenr pequeños huertos sustentables en tu hogar."},
+{id: 1, name: "Anabelle", image: "img/imagen05-ProyectoZY.jpg", genero: "unete", description: "Recuerdas a la muñeca poseida que tenia que ser resguardada por el gran peligro que representaba? Pues tu puedes hacer lo mismo, uniéndote a nuestro curso, con algo todavia más peligroso, los residuos resiclabes y reutilizables que usas todos los dias."},
+{id: 2, name: "Volver al futuro", image: "img/imagen06-ProyectoZY.jpg", genero: "unete", description: "En volver al futuro usaban el delorian para cambiar el pasado y así, tener un mejor futuro, nuestro curso hace lo mismo cambiando nuestor presente. Únete a nuestro curso de reciclaje y aprende a mejorar tus habitos."},
+{id: 3, name: "Los juegos del Hambre", image: "img/imagen07-ProyectoZY.jpg", genero: "unete", description: "En los juegos del hambre cada distrito se clasifica de distintas y especificas maneras, para separarlos uno del otro. En nuestro curso, aprenderas a clasificar algo que es casi tan complejo, tu basura andes de desacharla."},
+{id: 4, name: "Wall-e", image: "img/imagen08-ProyectoZY.jpg", genero: "unete", description: "Es decir, vamos...todos sabemos lo que paso en Wall-e. Únete a nuestro curso para aprender como crear y mantenr pequeños huertos sustentables en tu hogar."},
 
 ];
 
@@ -32,7 +32,61 @@ function renderDw(genero) {
     if (genero === "all") {
         dwSantiagoToRender = dwSantiago;
     } else {
-        dwSantiagoToRender = dwSantiago.filter(DwSantiago => DwSantiago.genero === genero);
+        dwSantiagoToRender = dwSantiago.filter(dw => dw.genero === genero);
     }
 
+    // Limpia el contenedor antes de renderizar
+    dwSantiagoContainer.innerHTML = '';
+
+
+    if (dwSantiagoToRender.length === 0) {
+        dwSantiagoContainer.innerHTML = '<p class="text-center w-100">No hay disponibles para esta categoría.</p>';
+        return;
+    }
+
+      // Crea y agrega las tarjetas 
+   dwSantiagoToRender.forEach(dw => {
+        const cardHtml = `
+            <figure class="proyecto-card" data-gender="${dw.genero}">
+                <img src="${dw.image}" alt="la espresa tiene los productos y proyectos, nombre: ${dw.name}">
+                <figcaption>
+                ${dw.name}
+            </figcaption>
+                <div class="card-description">
+                    <p>${dw.description}</p>
+                </div>
+            </figure>
+        `;
+        dwSantiagoContainer.innerHTML += cardHtml;
+    });
+}
+
+// Agrega event listeners a los botones de filtro
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const genero = button.dataset.category;
+
+
+        // Remueve la clase 'active' de todos los botones
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        // Agrega la clase 'active' al botón clickeado
+        button.classList.add("active");
+        
+        // Renderiza las tarjetas con el filtro seleccionado
+        renderDw(genero);
+    });
+});
+
+// Renderizar todos para cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+    renderDw('all');
+});
+
+
+// Función para el botón de volver al inicio
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
